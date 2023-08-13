@@ -5,8 +5,12 @@ const staffSchema = new Schema({
   adminID: {
     type: String,
     unique: true,
+    require: true,
   },
-  password: String,
+  password: {
+    type: String,
+    require: true,
+  },
   fullName: String,
   role: {
     type: String,
