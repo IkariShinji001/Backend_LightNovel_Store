@@ -19,6 +19,7 @@ const staffSchema = new Schema({
   },
   address: String,
   phoneNumber: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Staff = mongoose.model('Staff', staffSchema);

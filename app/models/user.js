@@ -17,6 +17,7 @@ const userSchema = new Schema({
   email: String,
   address: String,
   phoneNumber: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
 const User = mongoose.model('User', userSchema);

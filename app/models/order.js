@@ -21,6 +21,7 @@ const orderSchema = new Schema({
   },
   deliveryDate: Date,
   notes: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Order = mongoose.model('Order', orderSchema);

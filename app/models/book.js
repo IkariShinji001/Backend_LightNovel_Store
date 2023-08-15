@@ -51,6 +51,7 @@ const bookSchema = new Schema({
   age: Number,
   genres: [String],
   images: [String],
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Book = mongoose.model('Book', bookSchema);
