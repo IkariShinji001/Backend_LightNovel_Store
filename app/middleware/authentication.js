@@ -8,10 +8,10 @@ const authentication = (req, res, next) => {
       req.user = decodedToken;
       next();
     } catch (error) {
-      res.status(401).json({ error: 'Invalid token' });
+      res.status(401).json({ error: 'Token không hợp lệ' });
     }
   } else {
-    res.status(401).json({ error: 'Missing token' });
+    res.status(401).json({ error: 'Không có token' });
   }
 };
 

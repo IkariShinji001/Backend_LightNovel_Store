@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const staffSchema = new Schema({
-  adminID: {
+  staffID: {
     type: String,
     unique: true,
     require: true,
@@ -14,8 +14,8 @@ const staffSchema = new Schema({
   fullName: String,
   role: {
     type: String,
-    enum: ['Manager', 'Employee'],
-    default: 'Employee',
+    enum: ['admin', 'employee'],
+    default: 'employee',
   },
   address: String,
   phoneNumber: String,

@@ -9,7 +9,7 @@ const UserController = {
       if (result.statusCode === 400) {
         return next(new ApiError(result.statusCode, result.message));
       }
-      res.status(201).json({ message: 'Registration successful' });
+      res.status(201).json({ message: 'Đăng ký thành công' });
     } catch (error) {
       console.log(error);
       return next(new ApiError(500, 'Lỗi không xác định'));
@@ -24,7 +24,6 @@ const UserController = {
       if (result.statusCode === 400) {
         return next(new ApiError(result.statusCode, result.message));
       }
-
       res.cookie('access_token', result.access_token, { httpOnly: true });
       res.cookie('refresh_token', result.refresh_token, { httpOnly: true });
       return res

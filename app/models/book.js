@@ -22,6 +22,7 @@ const discountCodeSchema = new Schema({
   title: String,
   description: String,
   code: String,
+  startDate: Date,
   expirationDate: Date,
   isActive: Boolean,
 });
@@ -49,7 +50,7 @@ const bookSchema = new Schema({
   promotions: [String],
   quantity: Number,
   age: Number,
-  genres: [String],
+  genres: [{ type: Schema.Types.ObjectId, ref: 'Genres' }],
   images: [String],
   createdAt: { type: Date, default: Date.now },
 });
