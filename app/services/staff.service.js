@@ -10,13 +10,13 @@ class StaffService {
     const staff = await Staff.findOne({ staffID });
 
     if (!staff) {
-      return new ApiError(400, 'Tài khoản không tồn tại');
+      throw new ApiError(400, 'Tài khoản không tồn tại');
     }
 
     const isMatchPassword = await bcrypt.compare(password, staff.password);
 
     if (!isMatchPassword) {
-      return new ApiError(400, 'Mật khẩu không đúng');
+      throw new ApiError(400, 'Mật khẩu không đúng');
     }
 
     const access_token = jwt.sign(
@@ -39,7 +39,7 @@ class StaffService {
   async registerNewStaff(staffInfor) {
     const isStaffExisted = await Staff.findOne({ staffID: staffInfor.staffID });
     if (isStaffExisted) {
-      return new ApiError(400, 'Đã tồn tại nhân viên này');
+      throw new ApiError(400, 'Đã tồn tại nhân viên này');
     }
     staffInfor.password = await bcrypt.hash(staffInfor.password, 10);
     const newStaff = new Staff(staffInfor);

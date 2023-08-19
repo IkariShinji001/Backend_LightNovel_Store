@@ -6,16 +6,17 @@ const { v4: uuidv4 } = require('uuid');
 const ApiError = require('../api-error');
 const jwt = require('jsonwebtoken');
 const config = require('../config/index');
+const { default: mongoose } = require('mongoose');
 
 class UserService {
   async register(userInfor) {
     const user = await User.findOne({ username: userInfor.username });
     const email = await User.findOne({ email: userInfor.email });
     if (user) {
-      return new ApiError(400, 'Tên tài khoản đã tồn tại');
+      throw new ApiError(400, 'Tên tài khoản đã tồn tại');
     }
     if (email) {
-      return new ApiError(400, 'Email đã tồn tại');
+      throw new ApiError(400, 'Email đã tồn tại');
     }
     // Tạo token để verify email
     const verificationToken = uuidv4();
@@ -47,7 +48,7 @@ class UserService {
     const user = await User.findOne({ username });
 
     if (!user) {
-      return new ApiError(400, 'Không tồn tại tài khoản');
+      throw new ApiError(400, 'Không tồn tại tài khoản');
     }
 
     if (!user.isVerified) {
@@ -57,7 +58,7 @@ class UserService {
     const isMatchPassword = await bcrypt.compare(password, user.password);
 
     if (!isMatchPassword) {
-      return new ApiError(400, 'Sai mật khẩu');
+      throw new ApiError(400, 'Sai mật khẩu');
     }
 
     const access_token = jwt.sign(
@@ -80,6 +81,33 @@ class UserService {
 
     return { access_token, refresh_token, success: true };
   }
+
+  async resetPassword(oldPassowrd ,newPassword, username){
+
+    const user = await User.findOne({username});
+
+    if(!user){
+      throw new ApiError(400, 'Không tồn tại tài khoản');
+    }
+
+    console.log(user);
+    const isMatchPassword = await bcrypt.compare(oldPassowrd, user.password);
+
+    if(!isMatchPassword){
+      throw new ApiError(400, 'Sai mật khẩu');
+    }
+
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashPassword;
+    user.save();
+
+  }
+
+  async getAllUser(){
+    const users = await User.find({});
+    return users;
+  }
+
 }
 
 module.exports = UserService;

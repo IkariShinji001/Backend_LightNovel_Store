@@ -8,5 +8,6 @@ router
   .route('/')
   .post(authentication, authorization.admin, staffController.registerNewStaff);
 
-router.route('/login').post(staffController.login);
+router.route('/login')
+  .post(staffController.login);
 module.exports = router;

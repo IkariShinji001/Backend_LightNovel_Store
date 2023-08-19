@@ -14,6 +14,9 @@ const AuthController = {
       }
       res.status(200).json({ message: 'Tài khoản đã được xác thực ' });
     } catch (err) {
+      if (error instanceof ApiError) {
+        return next(new ApiError(error.statusCode, error.message));
+      }
       console.log(err);
       return next(new ApiError(500, 'Lỗi xảy ra trong quá trình xác thực'));
     }
@@ -36,6 +39,9 @@ const AuthController = {
         message: 'Xác thực refresh token thành công và cấp access_token mới',
       });
     } catch (error) {
+      if (error instanceof ApiError) {
+        return next(new ApiError(error.statusCode, error.message));
+      }
       console.log(error);
       return next(new ApiError(500, 'Lỗi xảy ra trong quá trình xác thực'));
     }

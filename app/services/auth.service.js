@@ -7,7 +7,7 @@ class AuthService {
     const user = await User.findOne({ verificationToken });
 
     if (!user) {
-      return new ApiError(400, 'Không tồn tại tài khoản này');
+      throw new ApiError(400, 'Không tồn tại tài khoản này');
     }
 
     user.isVerified = true;
@@ -19,7 +19,7 @@ class AuthService {
   async verifyRefreshToken(oldAccessToken, refreshToken) {
     const decodedToken = jwt.decode(oldAccessToken);
     if (!refreshToken) {
-      return new ApiError(401, 'Không tìm thấy refresh token');
+      throw new ApiError(401, 'Không tìm thấy refresh token');
     }
     const isVerified = jwt.verify(refreshToken, congfig.jwt.secret_key);
     if (isVerified) {
@@ -34,7 +34,7 @@ class AuthService {
       );
       return { success: true, accessToken };
     } else {
-      return new ApiError(401, 'Refresh token không hợp lệ');
+      throw new ApiError(401, 'Refresh token không hợp lệ');
     }
   }
 }

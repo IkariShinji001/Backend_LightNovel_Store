@@ -14,6 +14,9 @@ const staffController = {
         });
       }
     } catch (error) {
+      if(error instanceof ApiError){
+        return next(new ApiError(error.statusCode, error.result))
+      }
       console.log(error);
       return next(
         new ApiError(500, 'Lỗi xảy ra trong quá trình tạo error mới')
