@@ -10,6 +10,7 @@ const uploadSingleImageCoudinary = async (req, res, next) => {
     const resultImageUpload = await cloudinary.uploader.upload(path);
     fs.unlinkSync(path);
     req.cloudinary_secure_url = resultImageUpload.secure_url;
+    console.log(resultImageUpload.secure_url);
     next();
   } catch (error) {
     console.log(error);
