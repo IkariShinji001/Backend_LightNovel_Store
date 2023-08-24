@@ -6,7 +6,7 @@ const authentication = require('../middleware/authentication');
 router.route('/')
     .get(userController.getAllUsers)
     .post(userController.register)
-    .patch(authentication,userController.resetPassword)
+    .patch(authentication, userController.changePassword)
 
 router.route('/login')
     .post(userController.login);

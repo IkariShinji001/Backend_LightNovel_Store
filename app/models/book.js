@@ -21,12 +21,12 @@ const reviewSchema = new Schema({
 const bookSchema = new Schema({
   name: {
     type: String,
-    trim: true
+    trim: true,
   },
   displayTitle: {
     type: String,
     unique: true,
-    trim: true
+    trim: true,
   },
   volume: Number,
   author: String,

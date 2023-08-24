@@ -17,14 +17,17 @@ const bookController = {
     }
   },
 
-  async createBookImage(req, res, next){
-    const cloudinary_secure_url= req.cloudinary_secure_url;
+  async createBookImage(req, res, next) {
+    const cloudinary_secure_url = req.cloudinary_secure_url;
     const bookId = req.params.id;
-    try{
+    try {
       const bookService = new BookService();
-      const newImageUrl = await bookService.createNewImage(bookId, cloudinary_secure_url);
-      return res.status(201).json({newImageUrl});
-    }catch(error){
+      const newImageUrl = await bookService.createNewImage(
+        bookId,
+        cloudinary_secure_url
+      );
+      return res.status(201).json({ newImageUrl });
+    } catch (error) {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
@@ -33,20 +36,42 @@ const bookController = {
     }
   },
 
-  async deleteBookImage(req, res, next){
+  async deleteBookImage(req, res, next) {
     const publicId = req.params.publicId;
     const bookId = req.params.id;
-    try{
+    try {
       const bookService = new BookService();
       await bookService.deleteImage(bookId, publicId);
-      return res.status(200).json({message: 'Đã xóa ảnh thàng công'});
-    }catch(error){
+      return res.status(200).json({ message: 'Đã xóa ảnh thàng công' });
+    } catch (error) {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
       console.log(error);
       return res.status(500).json({ message: 'Lỗi không xác định' });
     }
+  },
+
+  async updateBook(req, res, next){
+    const updateData = req.body;
+    const {id} = req.params;
+
+    try {
+      const bookService = new BookService();
+      await bookService.updateBookInfor(id, updateData);
+
+      return res.status(200).json({message: 'Cập nhật thành công'});
+
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return next(new ApiError(error.statusCode, error.message));
+      }
+      console.log(error);
+      return res.status(500).json({ message: 'Lỗi không xác định' });
+    }
+
+
+
   }
 };
 

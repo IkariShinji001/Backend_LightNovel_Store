@@ -17,7 +17,7 @@ const orderSchema = new Schema({
   status: {
     type: String,
     enum: ['Chờ xác nhận', 'Đã xác nhận', 'Không xác nhận'],
-    default: 'Chờ xác nhận'
+    default: 'Chờ xác nhận',
   },
   quantity: Number,
   orderDate: {

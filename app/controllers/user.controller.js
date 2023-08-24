@@ -34,14 +34,13 @@ const UserController = {
     }
   },
 
-  async resetPassword(req, res, next){
-    const {username} = req.user;
-    const {oldPassword ,newPassword} = req.body;
-    console.log(username, oldPassword, newPassword);
-    try { 
+  async changePassword(req, res, next) {
+    const { username } = req.user;
+    const { oldPassword, newPassword } = req.body;
+    try {
       const userService = new UserService();
-      await userService.resetPassword(oldPassword, newPassword, username);
-      return res.status(200).json({message: 'Đã đổi mật khẩu thành công'});
+      await userService.changePassword(oldPassword, newPassword, username);
+      return res.status(200).json({ message: 'Đã đổi mật khẩu thành công' });
     } catch (error) {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));

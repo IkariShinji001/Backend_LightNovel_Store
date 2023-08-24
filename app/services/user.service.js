@@ -82,32 +82,29 @@ class UserService {
     return { access_token, refresh_token, success: true };
   }
 
-  async resetPassword(oldPassowrd ,newPassword, username){
+  async changePassword(oldPassowrd, newPassword, username) {
+    const user = await User.findOne({ username });
 
-    const user = await User.findOne({username});
-
-    if(!user){
+    if (!user) {
       throw new ApiError(400, 'Không tồn tại tài khoản');
     }
 
     console.log(user);
     const isMatchPassword = await bcrypt.compare(oldPassowrd, user.password);
 
-    if(!isMatchPassword){
+    if (!isMatchPassword) {
       throw new ApiError(400, 'Sai mật khẩu');
     }
 
     const hashPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashPassword;
     user.save();
-
   }
 
-  async getAllUser(){
+  async getAllUser() {
     const users = await User.find({});
     return users;
   }
-
 }
 
 module.exports = UserService;
