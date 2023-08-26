@@ -7,6 +7,9 @@ const uploadSingleImageCoudinary = require('../middleware/uploadImage');
 router.route('/')
     .post(bookController.createNewBook);
 
+router.route('/series')
+    .get(bookController.getBookSeries);
+
 router.route('/:id')
     .put(bookController.updateBook)
 

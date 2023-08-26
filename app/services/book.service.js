@@ -1,20 +1,24 @@
 const Book = require('../models/book');
+const Series = require('../models/series');
 const deleteCloudinaryImage = require('../helper/cloudinary/deleteCloudinaryImage');
 const getImageIdFromSecureUrl = require('../helper/cloudinary/getImageIdFromSecureUrl');
 const ApiError = require('../api-error');
 
 class BookService {
   async createNewBook(newBookInfor) {
-    const existedBook = await Book.findOne({name: newBookInfor.name,  volume: newBookInfor.volume});
+    const existedBook = await Book.findOne({
+      displayTitle: newBookInfor.displayTitle
+    });
 
-    if(existedBook){
+    if (existedBook) {
       throw new ApiError(400, 'Đã tồn tại quyển sách này');
     }
 
     newBookInfor.displayTitle =
-      newBookInfor.name + ' Volume ' + newBookInfor?.volume;
+      newBookInfor.seriesName + ' Volume ' + newBookInfor?.volume;
     const newBook = new Book(newBookInfor);
-    await newBook.save();
+    const {_id} = await newBook.save();
+    await Series.findByIdAndUpdate(seriesId, {$push: {book: _id.toString()}});
     return newBook;
   }
 
@@ -25,9 +29,9 @@ class BookService {
 
   async deleteImage(bookId, publicId) {
     const book = await Book.findById(bookId);
-    
-    if(!book){
-      throw new ApiError(400,'Không tồn tại ID sách');
+
+    if (!book) {
+      throw new ApiError(400, 'Không tồn tại ID sách');
     }
 
     book.images = book.images.filter((image) => {
@@ -39,16 +43,19 @@ class BookService {
     await book.save();
   }
 
-  async updateBookInfor(bookId,updateData){
+  async updateBookInfor(bookId, updateData) {
     const book = await Book.findById(bookId);
 
-    if(!book){
-      throw new ApiError(400,'Không tồn tại ID sách');
+    if (!book) {
+      throw new ApiError(400, 'Không tồn tại ID sách');
     }
-    
-    const existedBook = await Book.findOne({name: updateData?.name,  volume: updateData?.volume});
 
-    if(existedBook){
+    const existedBook = await Book.findOne({
+      name: updateData?.name,
+      volume: updateData?.volume,
+    });
+
+    if (existedBook) {
       throw new ApiError(400, 'Đã tồn tại quyển sách này');
     }
 
@@ -56,8 +63,31 @@ class BookService {
 
     book.displayTitle = book.name + ' Volume ' + book?.volume;
 
-
     await book.save();
+  }
+
+  async getAllBook() {
+    const books = await Book.find({});
+    return books;
+  }
+
+  async getBookSeriesByName(bookName) {
+    console.log(bookName);
+    const bookSeries = await Book.find({ name: bookName });
+    return bookSeries;
+  }
+
+  async getAllBookSeries() {
+    const bookSeries = await Book.aggregate([
+      {
+        $group: {
+          _id: '$name',
+          totalBooks: { $sum: 1 },
+          exmBook: { $first: '$$ROOT' }
+        },
+      },
+    ]);
+    return bookSeries;
   }
 }
 

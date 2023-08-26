@@ -19,23 +19,13 @@ const reviewSchema = new Schema({
 });
 
 const bookSchema = new Schema({
-  name: {
-    type: String,
-    trim: true,
-  },
-  displayTitle: {
-    type: String,
-    unique: true,
-    trim: true,
-  },
+  displayTitle: String,
   volume: Number,
-  author: String,
   bookCover: {
     type: String,
     enum: ['cứng', 'mềm'],
   },
   numberOfPages: Number,
-  publisher: String,
   weight: String,
   price: Number,
   discount: Number,

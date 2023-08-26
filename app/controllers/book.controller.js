@@ -12,8 +12,7 @@ const bookController = {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
-      console.log(error);
-      return res.status(500).json({ message: 'Lỗi không xác định' });
+      next(error);
     }
   },
 
@@ -31,8 +30,7 @@ const bookController = {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
-      console.log(error);
-      return res.status(500).json({ message: 'Lỗi không xác định' });
+      next(error);
     }
   },
 
@@ -47,32 +45,51 @@ const bookController = {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
-      console.log(error);
-      return res.status(500).json({ message: 'Lỗi không xác định' });
+      next(error);
     }
   },
 
-  async updateBook(req, res, next){
+  async updateBook(req, res, next) {
     const updateData = req.body;
-    const {id} = req.params;
+    const { id } = req.params;
 
     try {
       const bookService = new BookService();
       await bookService.updateBookInfor(id, updateData);
 
-      return res.status(200).json({message: 'Cập nhật thành công'});
-
+      return res.status(200).json({ message: 'Cập nhật thành công' });
     } catch (error) {
       if (error instanceof ApiError) {
         return next(new ApiError(error.statusCode, error.message));
       }
-      console.log(error);
-      return res.status(500).json({ message: 'Lỗi không xác định' });
+      next(error);
     }
+  },
 
+  async getAllBook(req, res, next) {
+    try {
+      const bookService = new BookService();
+      await bookService.getAllBook();
+    } catch (error) {
+      next(error);
+    }
+  },
 
+  async getBookSeries(req, res, next) {
+    const { name } = req.query;
+    try {
+      const bookService = new BookService();
+      if (name) {
+        const bookSeries = await bookService.getBookSeriesByName(name);
+        return res.status(200).json(bookSeries);
+      }
+      const bookSeries = await bookService.getAllBookSeries();
 
-  }
+      return res.status(200).json(bookSeries);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = bookController;
