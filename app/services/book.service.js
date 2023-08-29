@@ -1,15 +1,14 @@
 const Book = require('../models/book');
-const Series = require('../models/series');
 const deleteCloudinaryImage = require('../helper/cloudinary/deleteCloudinaryImage');
 const getImageIdFromSecureUrl = require('../helper/cloudinary/getImageIdFromSecureUrl');
 const ApiError = require('../api-error');
 
 class BookService {
-  async createNewBook(newBookInfor) {
+  async createNewBook(newBookInfor, seriesId) {
     const existedBook = await Book.findOne({
       displayTitle: newBookInfor.displayTitle
     });
-
+    
     if (existedBook) {
       throw new ApiError(400, 'Đã tồn tại quyển sách này');
     }
@@ -17,8 +16,6 @@ class BookService {
     newBookInfor.displayTitle =
       newBookInfor.seriesName + ' Volume ' + newBookInfor?.volume;
     const newBook = new Book(newBookInfor);
-    const {_id} = await newBook.save();
-    await Series.findByIdAndUpdate(seriesId, {$push: {book: _id.toString()}});
     return newBook;
   }
 

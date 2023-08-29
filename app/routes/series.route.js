@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth');
-const seriesController = require('../controllers/series.controller');
+const auth = require('../middleware/auth');
+const SeriesController = require('../controllers/series.controller');
+const seriesController = new SeriesController();
+
+router.route('/:id/books')
+    .post(auth.employeeOnly, seriesController.addBookToSeries)
+
 
 router.route('/')
-    .post(authMiddleware.adminOnly, seriesController.createNewSeries)
+    .get(seriesController.getSeries)
+    .post(auth.employeeOnly, seriesController.createNewSeries)
+
 
 
 module.exports = router;

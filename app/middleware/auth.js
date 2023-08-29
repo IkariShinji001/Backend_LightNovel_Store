@@ -1,10 +1,10 @@
 const authentication = require('./authentication');
 const authorization = require('./authorization');
 
-const authMiddleware = {
+const auth = {
     adminOnly: [authentication, authorization.admin],
     employeeOnly: [authentication, authorization.employee],
     loginRequired: [authentication]
 }
 
-module.exports = authMiddleware;
+module.exports = auth;

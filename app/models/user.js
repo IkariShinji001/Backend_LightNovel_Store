@@ -17,6 +17,11 @@ const userSchema = new Schema({
   email: String,
   address: String,
   phoneNumber: String,
+  notification: [{
+    title: String,
+    message: String,
+    isRead: {type: Boolean, default: false}
+  }], 
   createdAt: { type: Date, default: Date.now },
 });
 

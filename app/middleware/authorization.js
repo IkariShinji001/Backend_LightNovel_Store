@@ -8,7 +8,7 @@ class Authorization {
   }
 
   static employee(req, res, next) {
-    if (req.user.role === 'employee') {
+    if (req.user.role === 'employee' || req.user.role === 'admin') {
       next();
     } else {
       res.status(403).json({ error: 'Bạn không có quyền truy cập' });
